@@ -29,7 +29,7 @@ module top_level (
   localparam CHANNEL_SELECT_WIDTH = 3; // MCP3008 supports 7 channels
   localparam ADC_DATA_WIDTH = 17; // MCP3008 datasheet
   localparam ADC_DATA_CLK_PERIOD = 50;
-  localparam ADC_READ_PERIOD = 100_000;
+  localparam ADC_READ_PERIOD = 150_000;
   localparam ADC_READ_TIMER_WIDTH = $clog2(ADC_READ_PERIOD);
   // data
   localparam CLEAN_ADC_READ_DATA_START_INDEX = 1;
@@ -286,9 +286,9 @@ module top_level (
       // calculate electrodes
       if (trigger_sample_complete) begin
         lead_I_raw <= $signed(
-          // la_electrode_raw - 0
+          la_electrode_raw - 0
           // 0 - ra_electrode_raw
-          la_electrode_raw - ra_electrode_raw
+          // la_electrode_raw - ra_electrode_raw
         );
 
         valid_leads_out <= 1'b1;
@@ -300,15 +300,15 @@ module top_level (
     end
   end // end record data
 
-  logic signed [NUM_LEADS-1:0] [ACTUAL_DATA_RESOLUTION-1:0] packed_signed_raw_leads = {lead_I_raw};
+  logic signed [ELECTRODES_USED-1:0] [ACTUAL_DATA_RESOLUTION-1:0] packed_signed_raw_leads = {lead_I_raw};
 
-  logic signed [NUM_LEADS-1:0] [ACTUAL_DATA_RESOLUTION-1:0] packed_signed_filtered_leads;
+  logic signed [ELECTRODES_USED-1:0] [ACTUAL_DATA_RESOLUTION-1:0] packed_signed_filtered_leads;
   logic filter_data_valid;
 
   // antialias FIR filter
   fir_filter # (
     .DATA_RESOLUTION(ACTUAL_DATA_RESOLUTION),
-    .NUM_LEADS(NUM_LEADS)
+    .NUM_LEADS(ELECTRODES_USED)
   ) my_fir_filter (
     .clk_in(clk_pixel),
     .rst_in(sys_rst),
