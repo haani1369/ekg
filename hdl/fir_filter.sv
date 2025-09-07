@@ -11,7 +11,7 @@ module fir_filter # (
   output logic signed [NUM_LEADS-1:0] [DATA_RESOLUTION-1:0] signed_data_out,
   output logic data_valid_out
 );
-  localparam KERNEL_SIZE = 20;
+  localparam KERNEL_SIZE = 40;
   localparam EXTRA_PIPELINING_DELAY = 2;
 
   // pipelining stuff
@@ -37,7 +37,7 @@ module fir_filter # (
     for (int i = 0; i < KERNEL_SIZE; i=i+1) begin
       signed_kernel[i] = $signed(1);
     end
-    signed_kernel_shift = $signed(13);
+    signed_kernel_shift = $signed(10);
   end
 
   always_ff @(posedge clk_in) begin
@@ -85,6 +85,26 @@ module fir_filter # (
         + signed_multiply_results[17]
         + signed_multiply_results[18]
         + signed_multiply_results[19]
+        + signed_multiply_results[20]
+        + signed_multiply_results[21]
+        + signed_multiply_results[22]
+        + signed_multiply_results[23]
+        + signed_multiply_results[24]
+        + signed_multiply_results[25]
+        + signed_multiply_results[26]
+        + signed_multiply_results[27]
+        + signed_multiply_results[28]
+        + signed_multiply_results[29]
+        + signed_multiply_results[30]
+        + signed_multiply_results[31]
+        + signed_multiply_results[32]
+        + signed_multiply_results[33]
+        + signed_multiply_results[34]
+        + signed_multiply_results[35]
+        + signed_multiply_results[36]
+        + signed_multiply_results[37]
+        + signed_multiply_results[38]
+        + signed_multiply_results[39]
       );
 
       data_valid_out_pipe[0] <= 1'b1;

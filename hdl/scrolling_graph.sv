@@ -33,16 +33,24 @@ module scrolling_graph #(
 
   // actual logic
 
-  logic [HCOUNT_WIDTH-1:0] data_write_address;
-  evt_counter #(
-    .MAX_COUNT(SCREEN_WIDTH),
-    .WIDTH(HCOUNT_WIDTH)
-  ) hcount_counter (
-    .clk_in(clk_in),
-    .rst_in(rst_in),
-    .evt_in(data_valid_in),
-    .count_out(data_write_address)
-  );
+  logic [HCOUNT_WIDTH-1:0] write_pointer;
+  logic [HCOUNT_WIDTH-1:0] read_address;
+
+  always_ff @(posedge clk_in) begin
+    if (rst_in) begin
+      write_pointer <= 0;
+    end else if (data_valid_in) begin
+      write_pointer <= (write_pointer == SCREEN_WIDTH - 1) ? 0 : write_pointer + 1;
+    end
+  end
+
+  always_comb begin
+    if (hcount_in + write_pointer + 1 >= SCREEN_WIDTH) begin
+      read_address = hcount_in + write_pointer + 1 - SCREEN_WIDTH;
+    end else begin
+      read_address = hcount_in + write_pointer + 1;
+    end
+  end
 
   logic signed [DATA_RESOLUTION-1:0] signed_ram_data_read;
   xilinx_true_dual_port_read_first_2_clock_ram #(
@@ -56,7 +64,7 @@ module scrolling_graph #(
     .ena(1'b1),
     .wea(1'b0),
     .regcea(1'b1),
-    .addra(hcount_in), // read address based on the hcount
+    .addra(read_address),
     .dina(),
     .douta(signed_ram_data_read), // read SIGNED data to display
     
@@ -66,7 +74,7 @@ module scrolling_graph #(
     .enb(1'b1),
     .web(data_valid_in),  // Only write when data is valid
     .regceb(1'b0),
-    .addrb(data_write_address), // write address based on hcount 
+    .addrb(write_pointer),
     .dinb(data_in),    // Write actual signed data
     .doutb()
   );
