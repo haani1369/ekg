@@ -15,6 +15,7 @@ the filtered data is then just passed out to the scrolling graph to be displayed
 by HDMI
 
 ## the diagram:
+![diagram](rsc/diagram.jpeg)
 
 ## the actual setup and demo:
 i didn't have any actual electrodes that i could stick on my body so i used a
@@ -22,7 +23,7 @@ single-ended headphone jack to pass in `simulated_ecg.wav`[^1] which is supposed
 to replace both the left and right bicep leads (in my case). this means the 
 subtraction step is skipped (you'll see that in `top_level.sv`)
 
-<img src="rsc/setup.jpeg" width="320" height="240">
+![setup](rsc/setup.jpeg)
 
 https://github.com/user-attachments/assets/f9e294b4-dbf8-4272-a260-4e51f8a4ce40
 
