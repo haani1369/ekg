@@ -24,7 +24,7 @@ subtraction step is skipped (you'll see that in `top_level.sv`)
 
 <img src="rsc/setup.jpeg" width="320" height="240">
 
-https://github.com/haani1369/ekg/raw/refs/heads/main/rsc/demo.mp4
+https://github.com/user-attachments/assets/f9e294b4-dbf8-4272-a260-4e51f8a4ce40
 
 (hopefully your actual ekg will never look like this...)
 
